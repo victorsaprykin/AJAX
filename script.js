@@ -1,20 +1,32 @@
-'use strict'
+'use strict';
 
-const getData = () => fetch('./db.json');
+const getUrl = './db/db.json';
+const sendUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+const getData = () => {
+  return fetch('./db/db.json')
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+
+      return data;
+    });
+};
 
 const sendData = (url, data) => {
   return fetch(url, {
     method: 'POST',
-    body: data,
+    body: JSON.stringify(data),
     headers: {
       'Content-type': 'application/json; charset=UTF-8',
     },
-  })
-    .then((response) => response.json());
-
+  }).then((response) => response.json());
 };
 
-sendData('https://jsonplaceholder.typicode.com/posts', JSON.stringify(getData))
-  .then((data) => console.log(data))
+getData()
+  .then((data) => {
+    sendData(sendUrl, data);
+  })
   .catch((e) => console.log(`Error ${e}`));
+
 
